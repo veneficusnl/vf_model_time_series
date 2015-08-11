@@ -1,0 +1,12 @@
+Package: vf_model_time_series
+Type: Package
+Title: A snippet of vfmodels used as a demonstration on GitHub
+Version: 1.0
+Date: 2015-6-23
+Author: Emiel Veersma
+Maintainer: Emiel Veersma <emiel.veersma@veneficus.nl>
+Description: The vfmodel-package is a larger package used internally by Veneficus. This package is just a snippet of the code to support the readers of the blogs of Veneficus.
+License: GPL-3
+Imports: strucchange,
+     ggplot2
+Suggests: testthat
