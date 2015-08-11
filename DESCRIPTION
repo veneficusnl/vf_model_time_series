@@ -1,4 +1,4 @@
-Package: vf_model_time_series
+Package: vfmodels.timeseries
 Type: Package
 Title: A snippet of vfmodels used as a demonstration on GitHub
 Version: 1.0

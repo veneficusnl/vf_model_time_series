@@ -9,8 +9,8 @@ For installing the package which contains c++ source code, you also need to inst
 To install the package directly from GitHub, run this:
 
 	R> library(devtools)
-	R> devtools::install_github("veneficusnl", "vf_model_time_series")
+	R> devtools::install_github("veneficusnl/vf_model_time_series")
 
 To check whether you have successfully installed the package, try to load the package:
   
-	R> library('vf_model_time_series')
+	R> library('vfmodels.timeseries')
