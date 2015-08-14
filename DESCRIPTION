@@ -7,7 +7,7 @@ Author: Emiel Veersma
 Maintainer: Emiel Veersma <emiel.veersma@veneficus.nl>
 Description: The vfmodel-package is a larger package used internally by Veneficus. This package is just a snippet of the code to support the readers of the blogs of Veneficus.
 License: GPL-3
+Depends: ggplot2
 Imports: strucchange,
-     ggplot2,
 	 gridExtra
 Suggests: testthat

@@ -11,3 +11,7 @@ test_that("get_model works", {
   expect_is(model, 'model')
   expect_named(model, c("BIC", "form", "lm", "method", "periods", "x", "lag", "train", "call"))
 })
+
+test_that('test failing test', {
+  expect_equal(2,3)
+})

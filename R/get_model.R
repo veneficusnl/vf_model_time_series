@@ -2,6 +2,7 @@
 #' @description Get the correct model
 #' @param x data
 #' @param method The type of analysis. Possible analysis: c('time_series')
+#' @param ... other parameters, depending on the type of data
 #' @keywords vfmodels
 #' @author Emiel Veersma
 #' @family get_model
@@ -141,6 +142,7 @@ summary_model.time_series <- function(model) {
 #' res <- predict(model, x = x, n.ahead = 2, labels = labels, train = train)
 #' @keywords vfmodels
 #' @param model an model object
+#' @param ... other parameters, depending on the type of data
 #' @author Emiel Veersma
 #' @export
 predict.model <- function(model, ...) {
