@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/veneficusnl/vf_model_time_series.svg?branch=testing)](https://travis-ci.org/veneficusnl/vf_model_time_series)
 # Installing the packages
 
 To be able to install the package from the R console, you need to install the `devtools` packages.
