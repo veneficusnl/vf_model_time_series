@@ -6,7 +6,12 @@
 #' @author Emiel Veersma
 #' @family get_model
 #' @examples
-#' model <- get_model(lh, 'time_series')
+#' data('EIA')
+#' train <- 1:(nrow(data) - 5)
+#' labels <- data$Date
+#' x <- data$Value
+#'
+#' model <- get_model(x = x,method = 'time_series', lag = 2, labels = labels, family = gaussian('log'), train = train )
 #' @export
 get_model <- function(x, method, ...) {
   mc <- match.call(expand.dots = TRUE)
@@ -28,15 +33,22 @@ get_model <- function(x, method, ...) {
 #' \item Implement smoothing (now only sums and products of constants, linear relations and lags are incorporated)
 #' \item Check for overfitting
 #' }
-#' @param x a univariate time series
+#' @param x an univariate time series
 #' @param lag the number of lags to incorporate in the model
 #' @param labels the dates of the series
+#' @param family type of family used as input for the glm
+#' @param train the observations to be used as train input
 #' @keywords vfmodels time series
 #' @author Emiel Veersma
 #' @seealso \url{http://www.automaticstatistician.com/research.php} for the inspiration of this function.
 #' @family get_model
 #' @examples
-#' model <- get_model(lh, 'time_series')
+#' data('EIA')
+#' train <- 1:(nrow(data) - 5)
+#' labels <- data$Date
+#' x <- data$Value
+#'
+#' model <- get_model(x = x,method = 'time_series', lag = 2, labels = labels, family = gaussian('log'), train = train )
 #' @export
 get_model.time_series <- function(x, lag = NULL, labels = NULL, family = gaussian, train = NULL) {
   if (is.null(lag)) {
@@ -71,6 +83,19 @@ get_model.time_series <- function(x, lag = NULL, labels = NULL, family = gaussia
   return(res)
 }
 
+#' @title Plot a model
+#' @description Plot a model found by get_model
+#' @examples
+#' data('EIA')
+#' train <- 1:(nrow(data) - 5)
+#' labels <- data$Date
+#' x <- data$Value
+#'
+#' model <- get_model(x = x,method = 'time_series', lag = 2, labels = labels, family = gaussian('log'), train = train )
+#' plot(model)
+#' @keywords vfmodels
+#' @param model a model object
+#' @author Emiel Veersma
 #' @export
 plot.model <- function(model) {
   mc <- match.call(expand.dots = TRUE)
@@ -78,6 +103,19 @@ plot.model <- function(model) {
   eval(mc, parent.frame())
 }
 
+#' @title Summarize a model
+#' @description Summarize a model found by get_model
+#' @param model a model object
+#' @examples
+#' data('EIA')
+#' train <- 1:(nrow(data) - 5)
+#' labels <- data$Date
+#' x <- data$Value
+#'
+#' model <- get_model(x = x,method = 'time_series', lag = 2, labels = labels, family = gaussian('log'), train = train )
+#' summary(model)
+#' @keywords vfmodels
+#' @author Emiel Veersma
 #' @export
 summary.model <- function(model) {
   mc <- match.call(expand.dots = TRUE)
@@ -87,11 +125,23 @@ summary.model <- function(model) {
 
 #' @export
 summary_model.time_series <- function(model) {
-  res <- summary(model$lm)
-  res$periods <- model$periods
-  return(res)
+  print(summary(model$lm))
+  cat(paste(c('Periods:', model$periods), collapse = ' '))
 }
 
+#' @title Predict a model
+#' @description Predict a model found by get_model. The input depends
+#' @examples
+#' data('EIA')
+#' train <- 1:(nrow(data) - 5)
+#' labels <- data$Date
+#' x <- data$Value
+#'
+#' model <- get_model(x = x,method = 'time_series', lag = 2, labels = labels, family = gaussian('log'), train = train )
+#' res <- predict(model, x = x, n.ahead = 2, labels = labels, train = train)
+#' @keywords vfmodels
+#' @param model an model object
+#' @author Emiel Veersma
 #' @export
 predict.model <- function(model, ...) {
   mc <- match.call(expand.dots = TRUE)
@@ -106,6 +156,23 @@ predict_one_series <- function(model, data, prob) {
   return(res)
 }
 
+#' @title Predict a Time Series model
+#' @description Predict a Time Series model found by get_model. The output is still very unreliable and should be worked on in the future.
+#' @examples
+#' data('EIA')
+#' train <- 1:(nrow(data) - 5)
+#' labels <- data$Date
+#' x <- data$Value
+#'
+#' model <- get_model(x = x,method = 'time_series', lag = 2, labels = labels, family = gaussian('log'), train = train )
+#' res <- predict(model, x = x, n.ahead = 2, labels = labels, train = train)
+#' @keywords vfmodels
+#' @param model a model object
+#' @param x the input data
+#' @param n.ahead number of periods to be forecasted
+#' @param labels the labels of the data
+#' @param train training observations in the data
+#' @author Emiel Veersma
 #' @export
 predict_model.time_series <- function(model, x, n.ahead = 1, labels = NULL, train = NULL) {
   all_labels <- labels
@@ -154,13 +221,15 @@ predict_model.time_series <- function(model, x, n.ahead = 1, labels = NULL, trai
 }
 
 #' @import ggplot2
+#' @importFrom gridExtra grid.arrange
 #' @export
 plot_model.time_series <- function(model) {
   periods <- substr(names(model$x), 1, 6) == 'period'
   model$x$periods <- factor(as.matrix(model$x[, periods]) %*% (1:sum(periods)))
   par(mfrow = c(2, 1))
-  ggplot() + geom_line(data = model$x, aes(x = labels, y = x, colour = periods)) + xlab('date') + ylab('value') + theme_minimal()
-  ggplot() + geom_point(aes(x = model$x$labels, y = model$lm$residuals, colour = model$x$periods)) + xlab('date') + ylab('residuals') + theme_minimal()
+  plot_1 <- ggplot() + geom_line(data = model$x, aes(x = labels, y = x, colour = periods)) + xlab('date') + ylab('value') + theme_minimal()
+  plot_2 <- ggplot() + geom_point(aes(x = model$x$labels, y = model$lm$residuals, colour = model$x$periods)) + xlab('date') + ylab('residuals') + theme_minimal()
+  grid.arrange(plot_1, plot_2)
 }
 
 shake_reduce <- function(x, model, lag, periods, family) {

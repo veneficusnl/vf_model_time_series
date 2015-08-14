@@ -13,6 +13,10 @@ get_model.time_series(x, lag = NULL, labels = NULL, family = gaussian,
 \item{lag}{the number of lags to incorporate in the model}
 
 \item{labels}{the dates of the series}
+
+\item{family}{type of family used as input for the glm}
+
+\item{the}{observations to be used as train input}
 }
 \description{
 An algorithm to find the appropriate time series model. The algorithm performs a forward search on the formula.
@@ -27,7 +31,12 @@ Some improvements still need to be made:
 }
 }
 \examples{
-model <- get_model(lh, 'time_series')
+data('EIA')
+train <- 1:(nrow(data) - 5)
+labels <- data$Date
+x <- data$Value
+
+model <- get_model(x = x,method = 'time_series', lag = 2, labels = labels, family = gaussian('log'), train = train )
 }
 \author{
 Emiel Veersma

@@ -1,5 +1,5 @@
 #' @title Veneficus Models
-#' @name vfmodels-package
+#' @name vfmodels.timeseries
 #' @docType package
 #' @author Emiel Veersma \email{emiel.veersma@@veneficus.nl}
 #' @description An example package for GitHub
