@@ -8,7 +8,7 @@ get_model.time_series(x, lag = NULL, labels = NULL, family = gaussian,
   train = NULL)
 }
 \arguments{
-\item{x}{a univariate time series}
+\item{x}{an univariate time series}
 
 \item{lag}{the number of lags to incorporate in the model}
 
@@ -16,7 +16,7 @@ get_model.time_series(x, lag = NULL, labels = NULL, family = gaussian,
 
 \item{family}{type of family used as input for the glm}
 
-\item{the}{observations to be used as train input}
+\item{train}{the observations to be used as train input}
 }
 \description{
 An algorithm to find the appropriate time series model. The algorithm performs a forward search on the formula.

@@ -6,6 +6,9 @@
 \usage{
 \method{predict}{model}(model, ...)
 }
+\arguments{
+\item{model}{an model object}
+}
 \description{
 Predict a model found by get_model. The input depends
 }
